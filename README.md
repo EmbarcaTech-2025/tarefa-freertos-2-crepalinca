@@ -1,6 +1,7 @@
 # Tradutor de Texto para Código Morse com FreeRTOS na Raspberry Pi Pico
 
 **Autor:** Antonio Crepaldi
+
 **Autor:** Bianca Andrade
 **Data:** 25 de Junho de 2025
 
