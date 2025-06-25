@@ -1,31 +1,21 @@
-# Relatório de Análise: Sistema Multitarefa com FreeRTOS
+# Tradutor de Texto para Código Morse com FreeRTOS na Raspberry Pi Pico
 
 **Autor:** Antonio Crepaldi
-**Projeto:** embarcatech-freertos-tarefa-1
-**Data:** 14 de Junho de 2025
+**Autor:** Bianca Andrade
+**Data:** 25 de Junho de 2025
 
----
+## 1. Resumo do Projeto
 
-## 1. O que acontece se todas as tarefas tiverem a mesma prioridade?
+Este projeto transforma uma Raspberry Pi Pico em um tradutor de Código Morse em tempo real. Utilizando o sistema operacional de tempo real **FreeRTOS**, o sistema lê texto enviado através do terminal serial (USB), o converte para Código Morse e o reproduz de forma síncrona através de um LED e um buzzer.
 
-Se todas as tarefas compartilham a mesma prioridade no FreeRTOS, o escalonador adota a estratégia de **Round-Robin com Divisão de Tempo (Time Slicing)**. Nesse cenário, a CPU distribui o tempo de execução em pequenos intervalos, alternando entre as tarefas que estão prontas para serem executadas. Isso assegura um equilíbrio no uso do processador, evitando que uma única tarefa domine o sistema e dando a impressão de que todas estão rodando ao mesmo tempo.
+É um exemplo prático de multitarefa, comunicação inter-tarefas (usando filas) e controle de hardware com PWM para geração de áudio.
 
----
+## 2. Funcionalidades
 
-## 2. Qual tarefa consome mais tempo da CPU?
-
-A tarefa que mais utiliza o tempo da CPU é a **`button_task`**. Isso ocorre devido à sua **frequência de ativação mais alta**. Diferentemente das tarefas relacionadas ao LED e ao buzzer, que são ativadas apenas 2 vezes por segundo, a `button_task` é executada **10 vezes por segundo** para monitorar os botões por meio de verificação contínua (*polling*). Essa repetição constante e as trocas de contexto frequentes fazem com que ela acumule um maior consumo de recursos do processador.
-
----
-
-## 3. Quais seriam os riscos de usar polling?
-
-O método de *polling* (monitoramento periódico), embora prático, traz alguns perigos significativos em sistemas embarcados. Vou destacar três pontos críticos:
-
-Primeiro, há um **desperdício de CPU e energia**, que é o maior problema. A tarefa é ativada repetidamente, consumindo recursos mesmo quando não há eventos ou ações a serem processadas, o que é ineficiente. Segundo, existe uma **latência elevada**, já que a detecção de um evento, como o pressionamento de um botão, pode demorar até 100 ms (o intervalo de verificação), o que pode ser inadequado para aplicações que exigem respostas rápidas. Por fim, há o **risco de perder eventos**: se um evento for muito breve, como um toque no botão que dure menos de 100 ms, ele pode passar despercebido entre os ciclos de verificação.
-
-Uma solução mais eficiente para esses problemas seria implementar **interrupções**, que só ativam o processamento quando um evento de fato acontece, eliminando as limitações do polling.
-
----
-
-Espero que essa reescrita atenda ao que você esperava! Se precisar de mais ajustes ou tiver outras solicitações, é só avisar. Quanto ao arquivo em formato Markdown, o conteúdo acima já está formatado dessa forma. Caso queira que eu gere um documento específico, posso ajudar com isso.
+- **Tradução em Tempo Real:** Converte caracteres alfanuméricos (A-Z, 0-9) para Código Morse.
+- **Saída Dupla:** O código Morse é sinalizado simultaneamente de duas formas:
+  - **Visual:** Um LED pisca no ritmo dos pontos e traços.
+  - **Auditiva:** Um buzzer emite tons na mesma cadência do LED.
+- **Interface Serial:** A entrada de texto é feita via um terminal serial conectado à porta USB da Pico, facilitando o teste e a interação.
+- **Velocidade e Tom Ajustáveis:** A velocidade da transmissão Morse e o tom (frequência) do buzzer podem ser facilmente alterados através de constantes no código.
+- **Arquitetura Multitarefa:** Utiliza duas tarefas distintas do FreeRTOS para separar a lógica de entrada (leitura do console) da lógica de saída (geração do Morse), comunicando-se através de uma fila (Queue).
