@@ -1,4 +1,4 @@
-# Tradutor de Texto para Código Morse com FreeRTOS na Raspberry Pi Pico
+# Tradutor de Texto para Código Morse com FreeRTOS na BitDogLab
 
 **Autores:** Antonio Crepaldi e Bianca Andrade
 
@@ -19,3 +19,5 @@ Este projeto transforma uma Raspberry Pi Pico em um tradutor de Código Morse em
 - **Interface Serial:** A entrada de texto é feita via um terminal serial conectado à porta USB da Pico, facilitando o teste e a interação.
 - **Velocidade e Tom Ajustáveis:** A velocidade da transmissão Morse e o tom (frequência) do buzzer podem ser facilmente alterados através de constantes no código.
 - **Arquitetura Multitarefa:** Utiliza duas tarefas distintas do FreeRTOS para separar a lógica de entrada (leitura do console) da lógica de saída (geração do Morse), comunicando-se através de uma fila (Queue).
+
+## Video: https://youtu.be/7kD6fLrEDQw
